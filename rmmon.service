@@ -1,0 +1,8 @@
+[Service]
+KillMode=none
+WorkingDirectory=/dev/shm
+StandardOutput=kmsg+console
+ExecStart=/usr/local/bin/rmmon -d /run/initramfs
+
+[Install]
+WantedBy=multi-user.target
