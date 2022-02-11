@@ -1,20 +1,35 @@
-# rmmon
-rmmon is very narowly focused debugging tool. Its main goal is to monitor given directory for removal of files
-or directories. If a file or directory is deleted from the monitored path rmmon will log about this event.
+# unlinksnoop
+unlinksnoop is very focused debugging tool.  It's main goal is to
+monitor deletion of files.  If file deletion is attempted then
+unlinksnoop will log about this event.  unlinksnoop uses eBPF for
+low-overhead system-wide monitoring.
 
-rmmon is compiled as static binary which is completely standalone and once started via systemd it will continue
-running and monitoring until the system is shutdown. To achieve this behavior, rmmon will copy itself into
-/dev/shm and reexecute from there in order to not block umount of /usr. Also, rmmon.service has KillMode= set to
-"none".
+unlinksnoop is compiled as static binary which is completely
+standalone and if started via systemd it will continue running and
+monitoring until the system is shutdown.  To achieve this behavior,
+unlinksnoop will copy itself into /dev/shm and re-execute from there
+in order to not block umount of /usr.
 
-rmmon will log about removal to the journal and also it will try to send the message to the syslog server
-(over UDP port 514). To enable this functionality please specify "rmmon.syslog=<SERVER_ADDRESS>" on the
-kernel comand line.
+unlinksnoop will log about deletion of files to the journal. If you
+want to have log events from late shutdown you can set syslog server
+IP address using -s flag or on kernel command line
+using unlinksnoop.syslog= option.
 
-# How to build rmmon?
-Simply run "go build" in the root directory or type "make". In case the build failed, make sure that you have
-updated the Go dependency cache. To do that you can run "make update-modules".
+# Dependencies
+- bpftool
+- clang
+- glibc-static
+- go
 
-# Requirements
-- Go 1.17
-- systemd
+# Build instructions
+```shell
+$ git clone https://github.com/msekletar/unlinksnoop
+$ cd unlinksnoop
+$ make download-libs
+$ make
+$ sudo make install
+```
+
+# License
+- MIT
+- MIT or GPL-2.0 for eBPF code (`probe.bpf.c`)

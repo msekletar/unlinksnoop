@@ -1,0 +1,4 @@
+# github.com/aquasecurity/libbpfgo v0.2.4-libbpf-0.6.1
+## explicit; go 1.16
+github.com/aquasecurity/libbpfgo
+github.com/aquasecurity/libbpfgo/helpers
